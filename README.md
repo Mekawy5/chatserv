@@ -17,3 +17,4 @@ This is a dockerized golang simple chat system contains applications and applica
   - create workers to consume the queue.
   - workers should save messages in database and elasticsearch.
   - search messages should be implemented.
+  - use redis key-val im-memory db to store chat number
