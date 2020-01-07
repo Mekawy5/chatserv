@@ -36,12 +36,20 @@ services:
         - rabbitmq_data:/var/lib/rabbitmq/
         - rabbitmq_logs:/var/log/rabbitmq/
     ports:
-        - 5672:5672
-        - 15672:15672
+        - "5672:5672"
+        - "15672:15672"
 
+  # redis cache db
+  redis:
+    image: redis:5-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    volumes:
+      - redis-data:/data
 
 
 volumes:
   db_data:
   rabbitmq_data:
   rabbitmq_logs:
+  redis-data:

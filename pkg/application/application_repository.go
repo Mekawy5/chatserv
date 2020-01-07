@@ -15,7 +15,7 @@ func NewApplicationRepository(db *gorm.DB) *ApplicationRepository {
 
 func (a *ApplicationRepository) GetAll() []ApplicationModel {
 	var apps []ApplicationModel
-	a.DB.Find(&apps)
+	a.DB.Preload("Chats").Find(&apps)
 	return apps
 }
 
@@ -28,4 +28,10 @@ func (a *ApplicationRepository) Get(id uint) ApplicationModel {
 func (a *ApplicationRepository) Save(app ApplicationModel) ApplicationModel {
 	a.DB.Save(&app)
 	return app
+}
+
+func (a *ApplicationRepository) GetAppIdByToken(token string) uint {
+	var app ApplicationModel
+	a.DB.Where("token = ?", token).First(&app)
+	return app.ID
 }

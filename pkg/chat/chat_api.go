@@ -1,8 +1,10 @@
 package chat
 
 import (
-	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ChatApi struct {
@@ -27,7 +29,10 @@ func (ca *ChatApi) Create(c *gin.Context) {
 	var chat Chat
 	err := c.BindJSON(&chat)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
+		c.Status(http.StatusBadRequest)
+		return
 	}
-	c.JSON(http.StatusOK, gin.H{"chat": chat})
+	newChat := ca.Service.Create(NewChat(chat), c.Param("app_token"))
+	c.JSON(http.StatusOK, gin.H{"chat": GetChat(newChat)})
 }

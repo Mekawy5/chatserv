@@ -1,17 +1,19 @@
 package application
 
 import (
+	"github.com/Mekawy5/chatserv/pkg/chat"
 	"github.com/lithammer/shortuuid"
 	"time"
 )
 
 type Application struct {
-	ID         uint      `json:"id,omitempty"`
-	Name       string    `json:"name"`
-	Token      string    `json:"token"`
-	ChatsCount uint      `json:"chats_count"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID         uint        `json:"id,omitempty"`
+	Name       string      `json:"name"`
+	Token      string      `json:"token"`
+	ChatsCount uint        `json:"chats_count"`
+	Chats      []chat.Chat `json:"chats"`
+	CreatedAt  time.Time   `json:"created_at"`
+	UpdatedAt  time.Time   `json:"updated_at"`
 }
 
 func GetApplication(app ApplicationModel) Application {
@@ -19,6 +21,7 @@ func GetApplication(app ApplicationModel) Application {
 		Name:       app.Name,
 		Token:      app.Token,
 		ChatsCount: app.ChatsCount,
+		Chats:      chat.GetChats(app.Chats),
 		CreatedAt:  app.CreatedAt,
 		UpdatedAt:  app.UpdatedAt,
 	}

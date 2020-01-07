@@ -12,6 +12,7 @@ func main() {
 
 	appApi := registry.InitApplicationApi(db)
 	chatApi := registry.InitChatApi(db)
+
 	r := gin.Default()
 
 	r.GET("/applications", appApi.GetAll)
@@ -19,8 +20,8 @@ func main() {
 	r.POST("/application", appApi.Create)
 
 	r.GET("/chats", chatApi.GetAll)
-	r.GET("/chat/:id", chatApi.Get)
-	r.POST("/chat", chatApi.Create)
+	r.GET("/chat/:number", chatApi.Get)
+	r.POST("/chat/:app_token/create", chatApi.Create)
 
 	err := r.Run()
 	if err != nil {
