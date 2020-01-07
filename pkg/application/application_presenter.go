@@ -6,20 +6,21 @@ import (
 )
 
 type Application struct {
-	ID        uint      `json:"id"`
-	Name      string    `json:"name"`
-	Token     string    `json:"token"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID         uint      `json:"id,omitempty"`
+	Name       string    `json:"name"`
+	Token      string    `json:"token"`
+	ChatsCount uint      `json:"chats_count"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 func GetApplication(app ApplicationModel) Application {
 	return Application{
-		ID:        app.ID,
-		Name:      app.Name,
-		Token:     app.Token,
-		CreatedAt: app.CreatedAt,
-		UpdatedAt: app.UpdatedAt,
+		Name:       app.Name,
+		Token:      app.Token,
+		ChatsCount: app.ChatsCount,
+		CreatedAt:  app.CreatedAt,
+		UpdatedAt:  app.UpdatedAt,
 	}
 }
 

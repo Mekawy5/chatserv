@@ -1,7 +1,7 @@
 ###### First stage: build the executable.
 
-# Start from golang:1.11-alpine base image
-FROM golang:1.11-alpine As Builder
+# Start from golang:1.13-alpine base image
+FROM golang:1.13-alpine As Builder
 
 # enable go module
 ENV GO111MODULE=on

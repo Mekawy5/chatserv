@@ -11,6 +11,7 @@ services:
     env_file: .env
     depends_on: 
       - database
+      - rabbitmq
     restart: on-failure
 
   # mysql db
@@ -25,7 +26,22 @@ services:
     ports:
         - "3306:3306"
 
+  # rabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "chat_app_rabbitmq"
+    hostname: chatrmq
+    volumes:
+        - ./deploy/rabbitmq/rabbitmq.conf/:/etc/rabbitmq/rabbitmq.conf
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_logs:/var/log/rabbitmq/
+    ports:
+        - 5672:5672
+        - 15672:15672
+
 
 
 volumes:
   db_data:
+  rabbitmq_data:
+  rabbitmq_logs:

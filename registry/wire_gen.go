@@ -7,6 +7,7 @@ package registry
 
 import (
 	"github.com/Mekawy5/chatserv/pkg/application"
+	"github.com/Mekawy5/chatserv/pkg/chat"
 	"github.com/jinzhu/gorm"
 )
 
@@ -17,4 +18,11 @@ func InitApplicationApi(db *gorm.DB) *application.ApplicationApi {
 	applicationService := application.NewApplicationService(applicationRepository)
 	applicationApi := application.NewApplicationApi(applicationService)
 	return applicationApi
+}
+
+func InitChatApi(db *gorm.DB) *chat.ChatApi {
+	chatRepository := chat.NewChatRepository(db)
+	chatService := chat.NewChatService(chatRepository)
+	chatApi := chat.NewChatApi(chatService)
+	return chatApi
 }

@@ -8,4 +8,5 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/lithammer/shortuuid/v3 v3.0.4 // indirect
+	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
 )

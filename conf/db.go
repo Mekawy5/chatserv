@@ -1,9 +1,11 @@
 package conf
 
 import (
-	"github.com/Mekawy5/chatserv/pkg/application"
-	"github.com/jinzhu/gorm"
 	"os"
+
+	"github.com/Mekawy5/chatserv/pkg/application"
+	"github.com/Mekawy5/chatserv/pkg/chat"
+	"github.com/jinzhu/gorm"
 )
 
 func InitDB() *gorm.DB {
@@ -20,6 +22,7 @@ func InitDB() *gorm.DB {
 	}
 
 	db.AutoMigrate(&application.ApplicationModel{})
+	db.AutoMigrate(&chat.ChatModel{}).AddForeignKey("application_id", "applications(id)", "CASCADE", "CASCADE")
 
 	return db
 }
