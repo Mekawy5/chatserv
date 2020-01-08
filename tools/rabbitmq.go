@@ -29,7 +29,7 @@ func NewRabbitClient() *RabbitClient {
 func initConn() *amqp.Connection {
 	var amqpUrl string
 	if url := os.Getenv("AMQP_URL"); url == "" {
-		amqpUrl = "amqp://guest:guest@localhost:5672"
+		amqpUrl = "amqp://chatapp:chatpass@rabbitmq:5672"
 	} else {
 		amqpUrl = url
 	}

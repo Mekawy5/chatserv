@@ -7,6 +7,7 @@ import (
 	"github.com/Mekawy5/chatserv/pkg/chat"
 	"github.com/Mekawy5/chatserv/pkg/controllers"
 	"github.com/Mekawy5/chatserv/pkg/message"
+	"github.com/Mekawy5/chatserv/tools"
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 )
@@ -21,7 +22,7 @@ func InitChatApi(db *gorm.DB) *chat.ChatApi {
 	return &chat.ChatApi{}
 }
 
-func InitMessageController(db *gorm.DB) *controllers.MessageController {
+func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.MessageController {
 	wire.Build(controllers.NewMessageController, message.NewMessageService, message.NewMessageRepository)
 	return &controllers.MessageController{}
 }

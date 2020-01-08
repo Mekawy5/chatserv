@@ -1,30 +1,17 @@
 version: '3'
 services:
-  # go application
-  app:
-    container_name: "chat_app"
-    build:
-      context: .
-      dockerfile: ./deploy/Dockerfile
-    ports:
-      - "8080:8080"
-    env_file: .env
-    depends_on: 
-      - database
-      - rabbitmq
-    restart: on-failure
 
   # mysql db
   database:
     container_name: "chat_app_database"
     image: mysql:5.7
     volumes:
-        - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
     environment:
-        - MYSQL_DATABASE=chat
-        - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=chat
+      - MYSQL_ROOT_PASSWORD=123
     ports:
-        - "3306:3306"
+      - "3306:3306"
 
   # rabbitMQ
   rabbitmq:
@@ -32,12 +19,13 @@ services:
     container_name: "chat_app_rabbitmq"
     hostname: chatrmq
     volumes:
-        - ./deploy/rabbitmq/rabbitmq.conf/:/etc/rabbitmq/rabbitmq.conf
-        - rabbitmq_data:/var/lib/rabbitmq/
-        - rabbitmq_logs:/var/log/rabbitmq/
+      - ./deploy/rabbitmq/rabbitmq.config/:/etc/rabbitmq/rabbitmq.config
+      - ./deploy/rabbitmq/definitions.json/:/etc/rabbitmq/definitions.json
+      - rabbitmq_data:/var/lib/rabbitmq/
     ports:
-        - "5672:5672"
-        - "15672:15672"
+      - "5672:5672"
+      - "15672:15672"
+
 
   # redis cache db
   redis:
@@ -47,9 +35,21 @@ services:
     volumes:
       - redis-data:/data
 
+  # go application
+  app:
+    container_name: "chat_app"
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+    ports:
+      - "8080:8080"
+    env_file: .env
+    restart: on-failure
+    depends_on: 
+      - database
+      - rabbitmq
 
 volumes:
   db_data:
   rabbitmq_data:
-  rabbitmq_logs:
   redis-data:

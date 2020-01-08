@@ -35,7 +35,5 @@ func (s *MessageService) Create(msg MessageModel, appToken string, chatNum uint)
 
 	redisClient.SetAppChatInfo(appChatKey, msg.Number, msg.ChatID)
 
-	//TODO send created message to rabbitMQ
-
 	return msg
 }

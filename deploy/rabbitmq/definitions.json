@@ -1,0 +1,40 @@
+{
+    "users": [
+     {
+      "name": "chatapp",
+      "password": "chatpass",
+      "tags": "administrator"
+     },
+     {
+      "name": "guest",
+      "password": "guest",
+      "tags": "administrator"
+     }
+    ],
+    "vhosts": [
+     {
+      "name": "/"
+     }
+    ],
+    "permissions": [
+     {
+      "user": "chatapp",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+     },
+     {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+     }  
+    ],
+    "parameters": [],
+    "policies": [],
+    "queues": [],
+    "exchanges": [],
+    "bindings": []
+   }

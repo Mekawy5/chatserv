@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/Mekawy5/chatserv/conf"
 	"github.com/Mekawy5/chatserv/registry"
+	"github.com/Mekawy5/chatserv/tools"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,9 +11,13 @@ func main() {
 	db := conf.InitDB()
 	defer db.Close()
 
+	rmqc := tools.NewRabbitClient()
+	rmqc.SetUp()
+	defer rmqc.Conn.Close()
+
 	appApi := registry.InitApplicationApi(db)
 	chatApi := registry.InitChatApi(db)
-	msgController := registry.InitMessageController(db)
+	msgController := registry.InitMessageController(db, rmqc)
 
 	r := gin.Default()
 
