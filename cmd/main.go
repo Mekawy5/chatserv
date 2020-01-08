@@ -12,6 +12,7 @@ func main() {
 
 	appApi := registry.InitApplicationApi(db)
 	chatApi := registry.InitChatApi(db)
+	msgController := registry.InitMessageController(db)
 
 	r := gin.Default()
 
@@ -22,6 +23,8 @@ func main() {
 	r.GET("/chats", chatApi.GetAll)
 	r.GET("/chat/:number", chatApi.Get)
 	r.POST("/chat/:app_token/create", chatApi.Create)
+
+	r.POST("/app/:token/chat/:number/create-message", msgController.Create)
 
 	err := r.Run()
 	if err != nil {

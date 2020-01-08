@@ -8,6 +8,8 @@ package registry
 import (
 	"github.com/Mekawy5/chatserv/pkg/application"
 	"github.com/Mekawy5/chatserv/pkg/chat"
+	"github.com/Mekawy5/chatserv/pkg/controllers"
+	"github.com/Mekawy5/chatserv/pkg/message"
 	"github.com/jinzhu/gorm"
 )
 
@@ -25,4 +27,11 @@ func InitChatApi(db *gorm.DB) *chat.ChatApi {
 	chatService := chat.NewChatService(chatRepository)
 	chatApi := chat.NewChatApi(chatService)
 	return chatApi
+}
+
+func InitMessageController(db *gorm.DB) *controllers.MessageController {
+	messageRepository := message.NewMessageRepository(db)
+	messageService := message.NewMessageService(messageRepository)
+	messageController := controllers.NewMessageController(messageService)
+	return messageController
 }

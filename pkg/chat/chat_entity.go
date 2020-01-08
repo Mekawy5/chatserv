@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"github.com/Mekawy5/chatserv/pkg/message"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -10,6 +11,7 @@ type ChatModel struct {
 	ApplicationID uint
 	Number        uint
 	MessagesCount uint
+	Messages      []message.MessageModel `gorm:"foreignkey:ChatID"`
 }
 
 func (ChatModel) TableName() string {
