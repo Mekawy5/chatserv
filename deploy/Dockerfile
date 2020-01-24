@@ -1,7 +1,5 @@
-###### First stage: build the executable.
-
 # Start from golang:1.13-alpine base image
-FROM golang:1.13-alpine As Builder
+FROM golang:1.13-alpine
 
 # enable go module
 ENV GO111MODULE=on
@@ -15,7 +13,7 @@ RUN mkdir /user && \
 # Install the Certificate-Authority certificates for the app to be able to make
 # calls to HTTPS endpoints.
 # Git is required for fetching the dependencies.
-RUN apk add --no-cache ca-certificates git
+RUN apk add ca-certificates git
 
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
@@ -36,23 +34,13 @@ WORKDIR $GOPATH/src/github.com/Mekawy5/chatserv
 # Copy everything from the current directory to the PWD(Present Working Directory) inside the container
 COPY . .
 
+# Make wait-for.sh executable
+RUN chmod +x wait-for.sh
+
 # Build the executable to `/app`. Mark the build as statically linked.
 RUN go build \
     -installsuffix 'static' \
     -o /app ./cmd
-
-#========================================================
-###### Final stage: the running container.
-FROM scratch AS final
-
-# Import the user and group files from the first stage.
-COPY --from=Builder /user/group /user/passwd /etc/
-
-# Import the Certificate-Authority certificates for enabling HTTPS.
-COPY --from=Builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
-# Import the compiled executable from the second stage.
-COPY --from=Builder /app /app
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
@@ -62,5 +50,3 @@ EXPOSE 8080
 # Perform any further action as an unprivileged user.
 USER nobody:nobody
 
-# Run the compiled binary.
-ENTRYPOINT ["/app"]

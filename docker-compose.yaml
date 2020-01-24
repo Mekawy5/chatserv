@@ -1,5 +1,16 @@
 version: '3'
 services:
+  # go application
+  app:
+    container_name: "chat_app"
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+    ports:
+      - "8080:8080"
+    env_file: .env
+    restart: on-failure
+    entrypoint: sh -c './wait-for.sh rabbitmq:15672 -- /app'
 
   # mysql db
   database:
@@ -34,20 +45,6 @@ services:
     hostname: redis
     volumes:
       - redis-data:/data
-
-  # go application
-  app:
-    container_name: "chat_app"
-    build:
-      context: .
-      dockerfile: ./deploy/Dockerfile
-    ports:
-      - "8080:8080"
-    env_file: .env
-    restart: on-failure
-    depends_on: 
-      - database
-      - rabbitmq
 
 volumes:
   db_data:
