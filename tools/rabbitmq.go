@@ -7,9 +7,12 @@ import (
 )
 
 const (
-	EXNAME = "messages"
-	QNAME  = "saveMessages"
-	KEY    = "message.created"
+	MSGEXC = "messages"
+	MSGQ   = "saveMessages"
+	MSGKEY = "message.created"
+	CHTEXC = "chats"
+	CHTQ   = "saveChats"
+	CHTKEY = "chats.created"
 )
 
 type RabbitClient struct {
@@ -51,14 +54,23 @@ func initChannel(conn *amqp.Connection) *amqp.Channel {
 	return channel
 }
 
-func (c *RabbitClient) SetUp() {
-	err := c.Channel.ExchangeDeclare(EXNAME, amqp.ExchangeDirect, true, false, false, false, nil)
+func (c *RabbitClient) SetUpMsg() {
+	// messages queue setup
+	err := c.Channel.ExchangeDeclare(MSGEXC, amqp.ExchangeDirect, true, false, false, false, nil)
 	handleErr(err)
-
-	_, err = c.Channel.QueueDeclare(QNAME, true, false, false, false, nil)
+	_, err = c.Channel.QueueDeclare(MSGQ, true, false, false, false, nil)
 	handleErr(err)
+	err = c.Channel.QueueBind(MSGQ, MSGKEY, MSGEXC, false, nil)
+	handleErr(err)
+}
 
-	err = c.Channel.QueueBind(QNAME, KEY, EXNAME, false, nil)
+func (c *RabbitClient) SetUpCht() {
+	// chats queue setup
+	err := c.Channel.ExchangeDeclare(CHTEXC, amqp.ExchangeDirect, true, false, false, false, nil)
+	handleErr(err)
+	_, err = c.Channel.QueueDeclare(CHTQ, true, false, false, false, nil)
+	handleErr(err)
+	err = c.Channel.QueueBind(CHTQ, CHTKEY, CHTEXC, false, nil)
 	handleErr(err)
 }
 

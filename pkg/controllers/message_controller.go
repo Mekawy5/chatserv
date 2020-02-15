@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/Mekawy5/chatserv/pkg/message"
 	"github.com/Mekawy5/chatserv/tools"
+	"github.com/Mekawy5/chatserv/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,12 +43,8 @@ func (mc *MessageController) Create(c *gin.Context) {
 	chatNum, _ := strconv.Atoi(c.Param("number"))
 
 	newMsg := mc.Service.Create(message.NewMessage(msg), c.Param("token"), uint(chatNum))
-	jsonMsg, err := json.Marshal(newMsg)
-	if err != nil {
-		panic(err)
-	}
 
-	mc.RabbitMQ.Publish(tools.EXNAME, tools.KEY, jsonMsg)
+	mc.RabbitMQ.Publish(tools.MSGEXC, tools.MSGKEY, util.ToJson(newMsg))
 
 	c.JSON(http.StatusOK, gin.H{"msg": message.GetMessage(newMsg)})
 }

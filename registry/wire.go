@@ -26,3 +26,8 @@ func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.Me
 	wire.Build(controllers.NewMessageController, message.NewMessageService, message.NewMessageRepository)
 	return &controllers.MessageController{}
 }
+
+func InitChatController(*tools.RabbitClient) *controllers.ChatConroller {
+	wire.Build(controllers.NewChatConroller)
+	return &controllers.ChatConroller{}
+}

@@ -36,3 +36,8 @@ func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.Me
 	messageController := controllers.NewMessageController(messageService, rmc)
 	return messageController
 }
+
+func InitChatController(rabbitClient *tools.RabbitClient) *controllers.ChatConroller {
+	chatConroller := controllers.NewChatConroller(rabbitClient)
+	return chatConroller
+}

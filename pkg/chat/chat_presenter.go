@@ -7,6 +7,7 @@ import (
 type Chat struct {
 	ID            uint      `json:"id,omitempty"`
 	ApplicationID uint      `json:"application_id,omitempty"`
+	AppToken      string    `json:"app_token,omitempty"`
 	Number        uint      `json:"number"`
 	MessagesCount uint      `json:"messages_count"`
 	CreatedAt     time.Time `json:"created_at"`

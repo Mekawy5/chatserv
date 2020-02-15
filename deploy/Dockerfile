@@ -15,6 +15,9 @@ RUN mkdir /user && \
 # Git is required for fetching the dependencies.
 RUN apk add ca-certificates git
 
+# CompileDaemon for live reolad
+RUN go get github.com/githubnemo/CompileDaemon
+
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
 # * GOFLAGS=-mod=vendor to force `go build` to look into the `/vendor` folder, --

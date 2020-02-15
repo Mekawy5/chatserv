@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/Mekawy5/chatserv/tools"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
@@ -18,18 +17,23 @@ func NewChatService(r *ChatRepository) *ChatService {
 	}
 }
 
-func (s *ChatService) Create(chat ChatModel, appToken string) ChatModel {
-	redisClient := tools.NewRedisClient()
-	chatNum := redisClient.GetAppChatNumber(appToken)
-	chat.Number = uint(chatNum + 1)
+// func (s *ChatService) Create(chat ChatModel, appToken string) ChatModel {
+// 	redisClient := tools.NewRedisClient()
+// 	chatNum := redisClient.GetAppChatNumber(appToken)
+// 	chat.Number = uint(chatNum + 1)
 
-	appId := s.Repository.GetAppId(appToken)
-	chat.ApplicationID = appId
+// 	appId := s.Repository.GetAppId(appToken)
+// 	chat.ApplicationID = appId
 
-	newChat := s.Repository.Save(chat)
+// 	newChat := s.Repository.Save(chat)
 
-	redisClient.SetAppChatNumber(appToken, chat.Number)
-	return newChat
+// 	redisClient.SetAppChatNumber(appToken, chat.Number)
+// 	return newChat
+// }
+
+func (s *ChatService) CreateChat(chat Chat, appToken string) Chat {
+
+	return chat
 }
 
 func handleErrors(errs []error) {

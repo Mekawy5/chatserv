@@ -42,6 +42,7 @@ func NewRedisClient() *RedisClient {
 }
 
 // get last chat number for given app
+// TODO if chat number not found, hit database
 func (rc *RedisClient) GetAppChatNumber(appToken string) uint {
 	lastChatNum, _ := rc.Client.Get(appToken).Result()
 	if lastChatNum == "" {
