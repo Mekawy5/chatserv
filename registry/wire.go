@@ -22,6 +22,11 @@ func InitChatApi(db *gorm.DB) *chat.ChatApi {
 	return &chat.ChatApi{}
 }
 
+func InitApplicationController(rmc *tools.RabbitClient) *controllers.ApplicationController {
+	wire.Build(controllers.NewApplicationController)
+	return &controllers.ApplicationController{}
+}
+
 func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.MessageController {
 	wire.Build(controllers.NewMessageController, message.NewMessageService, message.NewMessageRepository)
 	return &controllers.MessageController{}

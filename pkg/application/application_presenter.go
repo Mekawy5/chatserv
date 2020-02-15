@@ -1,9 +1,9 @@
 package application
 
 import (
-	"github.com/Mekawy5/chatserv/pkg/chat"
-	"github.com/lithammer/shortuuid"
 	"time"
+
+	"github.com/Mekawy5/chatserv/pkg/chat"
 )
 
 type Application struct {
@@ -38,6 +38,6 @@ func GetApplications(apps []ApplicationModel) []Application {
 func NewApplication(app Application) ApplicationModel {
 	return ApplicationModel{
 		Name:  app.Name,
-		Token: shortuuid.New(),
+		Token: app.Token,
 	}
 }

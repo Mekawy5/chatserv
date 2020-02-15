@@ -13,6 +13,9 @@ const (
 	CHTEXC = "chats"
 	CHTQ   = "saveChats"
 	CHTKEY = "chats.created"
+	APPEXC = "applications"
+	APPQ   = "saveApplications"
+	APPKEY = "applications.created"
 )
 
 type RabbitClient struct {
@@ -54,7 +57,17 @@ func initChannel(conn *amqp.Connection) *amqp.Channel {
 	return channel
 }
 
-func (c *RabbitClient) SetUpMsg() {
+func (c *RabbitClient) setUpApp() {
+	// applications queue setup
+	err := c.Channel.ExchangeDeclare(APPEXC, amqp.ExchangeDirect, true, false, false, false, nil)
+	handleErr(err)
+	_, err = c.Channel.QueueDeclare(APPQ, true, false, false, false, nil)
+	handleErr(err)
+	err = c.Channel.QueueBind(APPQ, APPKEY, APPEXC, false, nil)
+	handleErr(err)
+}
+
+func (c *RabbitClient) setUpMsg() {
 	// messages queue setup
 	err := c.Channel.ExchangeDeclare(MSGEXC, amqp.ExchangeDirect, true, false, false, false, nil)
 	handleErr(err)
@@ -64,7 +77,7 @@ func (c *RabbitClient) SetUpMsg() {
 	handleErr(err)
 }
 
-func (c *RabbitClient) SetUpCht() {
+func (c *RabbitClient) setUpCht() {
 	// chats queue setup
 	err := c.Channel.ExchangeDeclare(CHTEXC, amqp.ExchangeDirect, true, false, false, false, nil)
 	handleErr(err)
@@ -72,6 +85,12 @@ func (c *RabbitClient) SetUpCht() {
 	handleErr(err)
 	err = c.Channel.QueueBind(CHTQ, CHTKEY, CHTEXC, false, nil)
 	handleErr(err)
+}
+
+func (c *RabbitClient) Setup() {
+	c.setUpApp()
+	c.setUpCht()
+	c.setUpMsg()
 }
 
 func (c *RabbitClient) Publish(exchange, key string, message []byte) {

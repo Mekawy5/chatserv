@@ -12,20 +12,23 @@ func main() {
 	defer db.Close()
 
 	rmqc := tools.NewRabbitClient()
-	rmqc.SetUpMsg()
-	rmqc.SetUpCht()
+	go rmqc.Setup()
+
 	defer rmqc.Conn.Close()
 
 	appApi := registry.InitApplicationApi(db)
 	chatApi := registry.InitChatApi(db)
-	msgCtr := registry.InitMessageController(db, rmqc)
+
+	appCtr := registry.InitApplicationController(rmqc)
 	chatCtr := registry.InitChatController(rmqc)
+	msgCtr := registry.InitMessageController(db, rmqc)
 
 	r := gin.Default()
 
 	r.GET("/applications", appApi.GetAll)
 	r.GET("/application/:id", appApi.Get)
-	r.POST("/application", appApi.Create)
+	// r.POST("/application", appApi.Create)
+	r.POST("/application", appCtr.Create)
 
 	r.GET("/chats", chatApi.GetAll)
 	r.GET("/chat/:number", chatApi.Get)

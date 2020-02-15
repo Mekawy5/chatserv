@@ -30,6 +30,11 @@ func InitChatApi(db *gorm.DB) *chat.ChatApi {
 	return chatApi
 }
 
+func InitApplicationController(rmc *tools.RabbitClient) *controllers.ApplicationController {
+	applicationController := controllers.NewApplicationController(rmc)
+	return applicationController
+}
+
 func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.MessageController {
 	messageRepository := message.NewMessageRepository(db)
 	messageService := message.NewMessageService(messageRepository)
