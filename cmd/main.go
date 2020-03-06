@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	//TODO make this app stateless (remove db and redis, all persistent info needed will be consumed from the chatapp application)
 	db := conf.InitDB()
 	defer db.Close()
 
