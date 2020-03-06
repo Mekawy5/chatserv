@@ -21,6 +21,8 @@ func (s *MessageService) Create(msg MessageModel, appToken string, chatNum uint)
 	redisClient := tools.NewRedisClient()
 	lastMsgNum, chatId := redisClient.GetAppChatInfo(appChatKey)
 
+	// TODO get last msg num & chat number from other service that will be connected to db.
+
 	if lastMsgNum == 0 {
 		msg.Number = 1
 	} else {
