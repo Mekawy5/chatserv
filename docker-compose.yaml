@@ -13,7 +13,7 @@ services:
       - ./:/go/src/github.com/Mekawy5/chatserv
     env_file: .env
     restart: on-failure
-    entrypoint: sh -c './wait-for.sh rabbitmq:15672 -t 60 -- CompileDaemon --build="go build -installsuffix 'static' -o /app ./cmd" --command=/app'
+    entrypoint: sh -c './wait-for.sh database:3306 -t 60 -- CompileDaemon --build="go build -installsuffix 'static' -o /app ./cmd" --command=/app'
 
   # mysql db
   database:
@@ -27,19 +27,6 @@ services:
     ports:
       - "3306:3306"
 
-  # rabbitMQ
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: "chat_app_rabbitmq"
-    hostname: chatrmq
-    volumes:
-      - ./deploy/rabbitmq/rabbitmq.config/:/etc/rabbitmq/rabbitmq.config
-      - ./deploy/rabbitmq/definitions.json/:/etc/rabbitmq/definitions.json
-      - rabbitmq_data:/var/lib/rabbitmq/
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
 
   # redis cache db
   redis:
@@ -51,5 +38,9 @@ services:
 
 volumes:
   db_data:
-  rabbitmq_data:
   redis-data:
+
+networks: 
+  default:
+    external: 
+      name: queue-service_default
