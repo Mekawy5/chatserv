@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/Mekawy5/chatserv/pkg/message"
 	"github.com/Mekawy5/chatserv/tools"
@@ -12,14 +13,12 @@ import (
 )
 
 type MessageController struct {
-	Service  *message.MessageService
-	RabbitMQ *tools.RabbitClient
+	Q *tools.RabbitClient
 }
 
-func NewMessageController(a *message.MessageService, rmqc *tools.RabbitClient) *MessageController {
+func NewMessageController(q *tools.RabbitClient) *MessageController {
 	return &MessageController{
-		Service:  a,
-		RabbitMQ: rmqc,
+		Q: q,
 	}
 }
 
@@ -42,9 +41,15 @@ func (mc *MessageController) Create(c *gin.Context) {
 
 	chatNum, _ := strconv.Atoi(c.Param("number"))
 
-	newMsg := mc.Service.Create(message.NewMessage(msg), c.Param("token"), uint(chatNum))
+	// append app token, chat number to struct, will be used in another service to fetch & cache app id and the proper chat last msg number and the chat id ..etc
+	// append created at, updated at to track request date not database storing date
+	// newMsg := mc.Service.Create(message.NewMessage(msg), c.Param("token"), uint(chatNum))
+	msg.AppToken = c.Param("token")
+	msg.ChatNum = uint(chatNum)
+	msg.CreatedAt = time.Now()
+	msg.UpdatedAt = msg.CreatedAt
 
-	mc.RabbitMQ.Publish(tools.MSGEXC, tools.MSGKEY, util.ToJson(newMsg))
+	mc.Q.Publish(tools.MSGEXC, tools.MSGKEY, util.ToJson(msg))
 
-	c.JSON(http.StatusOK, gin.H{"msg": message.GetMessage(newMsg)})
+	c.JSON(http.StatusOK, gin.H{"msg": msg})
 }

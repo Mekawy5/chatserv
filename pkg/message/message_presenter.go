@@ -9,6 +9,8 @@ type Message struct {
 	ChatID    uint      `json:"chat_id,omitempty"`
 	Number    uint      `json:"number"`
 	Body      string    `json:"body"`
+	AppToken  string    `json:"app_token"`
+	ChatNum   uint      `json:"chat_num"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

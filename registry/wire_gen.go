@@ -6,39 +6,19 @@
 package registry
 
 import (
-	"github.com/Mekawy5/chatserv/pkg/application"
-	"github.com/Mekawy5/chatserv/pkg/chat"
 	"github.com/Mekawy5/chatserv/pkg/controllers"
-	"github.com/Mekawy5/chatserv/pkg/message"
 	"github.com/Mekawy5/chatserv/tools"
-	"github.com/jinzhu/gorm"
 )
 
 // Injectors from wire.go:
-
-func InitApplicationApi(db *gorm.DB) *application.ApplicationApi {
-	applicationRepository := application.NewApplicationRepository(db)
-	applicationService := application.NewApplicationService(applicationRepository)
-	applicationApi := application.NewApplicationApi(applicationService)
-	return applicationApi
-}
-
-func InitChatApi(db *gorm.DB) *chat.ChatApi {
-	chatRepository := chat.NewChatRepository(db)
-	chatService := chat.NewChatService(chatRepository)
-	chatApi := chat.NewChatApi(chatService)
-	return chatApi
-}
 
 func InitApplicationController(rmc *tools.RabbitClient) *controllers.ApplicationController {
 	applicationController := controllers.NewApplicationController(rmc)
 	return applicationController
 }
 
-func InitMessageController(db *gorm.DB, rmc *tools.RabbitClient) *controllers.MessageController {
-	messageRepository := message.NewMessageRepository(db)
-	messageService := message.NewMessageService(messageRepository)
-	messageController := controllers.NewMessageController(messageService, rmc)
+func InitMessageController(rmc *tools.RabbitClient) *controllers.MessageController {
+	messageController := controllers.NewMessageController(rmc)
 	return messageController
 }
 
